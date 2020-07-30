@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo Lirik</title>
+	<link href="demo.css?v=2" rel="stylesheet">
+	<script src="js/ast-lirik.js"></script>
+	<script src="assets/jquery-1.11.1.min.js"></script>
+	<link href="assets/fa/css/fa.css" rel="stylesheet">
+	<script src="../ast-lebayify/js/ast-lebayify.js?v=2"></script>
+	<script src="assets/d3.min.js"></script>
+</head>
+<body>
+	<div id="loding">
+		<div id="konten-l">
+			<h3>Bentar ya...</h3>
+			<h1 id="persen-l">100<span>%</span></h1>
+			<hr>
+			<button id="mulai">Mulai</button>
+		</div>
+	</div>
+	<audio id="audio" data-offset="1.1" src="assets/ABBA - Dream World.mp3"></audio>
+	<input hidden="" type="file" id="lirik" class="tbl-file">
+	<input hidden="" type="file" id="lagu" multiple="" class="tbl-file">
+	<div class="tombol-atas" style="text-align: center; display: none">
+		<button id="ambil-lagu" class="tbl-file"><span>Ambil Lagu</span></button>
+	</div>
+	<div id="tempat-foto">
+		<img id="muat-gambar" hidden>
+		<svg id="tpt">
+			<filter id="brightin">
+				<feComponentTransfer>
+					<feFuncR type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="1;0"/>
+					</feFuncR>
+					<feFuncG type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="1;0"/>
+					</feFuncG>
+					<feFuncB type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="1;0"/>
+					</feFuncB>
+				</feComponentTransfer>
+			</filter>
+			<filter id="brightout">
+				<feComponentTransfer>
+					<feFuncR type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;-1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="-1;0"/>
+					</feFuncR>
+					<feFuncG type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;-1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="-1;0"/>
+					</feFuncG>
+					<feFuncB type="linear" slope="1" intercept="-1">
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="0;-1"/>
+						<animate attributeName="intercept" attributeType="XML" fill="freeze" begin="indefinite" end="indefinite" dur="1.5s" values="-1;0"/>
+					</feFuncB>
+				</feComponentTransfer>
+			</filter>
+			<image></image>
+		</svg>
+	</div>
+	<!-- <p>Album: <span id="album"></span></p>
+	<p>Artist: <span id="artist"></span></p>
+	<p>Title: <span id="title"></span></p>
+	<div id="totdur">
+		<div id="tot"></div>
+		<div id="dur"></div>
+		<div id="con"></div>
+		<div id="time">00.00</div>
+	</div> -->
+<!-- 		<div id="kotak-lirik">
+			<h1 id="liriknya">So it can only get better...</h1>
+		</div> -->
+	<div id="tempat-lirik">
+		
+	</div>
+	<div id="template-lirik" hidden>
+		<div class="kotak-lirik">
+			<div class="bg-lirik"></div>
+			<h1 class="liriknya">So it can only get better...</h1>
+		</div>
+	</div>
+	<script>
+	    var fotoArr = Array.apply(0,new Array(15)).map(function(h,i){ return String.fromCharCode(65 + i) });
+	    var fotoU = [];
+	    var bFoto = fotoArr.length;
+	    var lirikH1 = $(".liriknya");
+		var kotakLirik = $('.kotak-lirik');
+		var posXY = [0, 0];
+		var acakXY = [1, 1];
+		var tempatLirik = [];
+		var lirikSekarang;
+
+		var svg = d3.select("#tpt")
+		    .attr("width", $(window).width())
+		    .attr("height", $(window).height())
+		    .attr("preserveAspectRatio", "xMidYMid meet");
+
+		var $tptFoto = svg.select("image");
+		var lC = 0;
+
+		var au = AstLirik("audio");
+		$("#mulai").click(function(event) {
+			au.play();
+			$("#loding").fadeOut('slow', function () {
+			});
+			$("#mulai").css('transform', 'scale(16)');
+			$("#mulai").css('transition', 'all 0.8s cubic-bezier(0.7, 0, 0.84, 0)');
+		});
+
+		au.update(function (t, l, b, m, v) {
+			if (b) {
+				lC++;
+
+				if (l) {
+					lirikH1.text(l);
+
+					lirikSekarang = $("#template-lirik").find(".kotak-lirik").clone();
+					lirikSekarang.appendTo("#tempat-lirik");
+					lirikSekarang.css('top', (Math.random() * ($(window).height() * 0.5)) + ($(window).height() * 0.25) + 'px');
+					lirikSekarang.css('left', (Math.random() * ($(window).width() * 0.5)) + ($(window).width() * 0.25) + 'px');
+					lirikSekarang.ancur = function () {
+						var ini = $(this);
+						Astify(ini.find(".liriknya")[0]).action("stretch", {dir: "right", duration: 200, split: 2, delayInBetween: 0.02, randomize: true, type: 1}, function () {
+							tempatLirik.shift();
+							ini.find('.bg-lirik').css('width', '0px');
+							ini.find('.bg-lirik').css('left', '400px');
+							setTimeout(function () {
+								ini.remove();
+							}, 500);
+						});
+					};
+
+					tempatLirik.push(lirikSekarang);
+					lirikSekarang.find('.bg-lirik').css('width', '400px');
+					lirikSekarang.height(lirikSekarang.find('.liriknya').outerHeight(true));
+					Astify(lirikSekarang.find(".liriknya")[0]).action("elegance", {dir: "elegant", duration: 800, split: 1, delayInBetween: 0.1, randomize: true});
+				if (lC % 2 == 0) {
+					lakukanTransisi(1);
+				}
+
+				if (tempatLirik.length > 1)
+					tempatLirik[0].ancur();					
+				}
+			}
+		});
+
+		var _termuat = 0;
+		var _persen = 0;
+
+		var _acak = Math.floor(Math.random() * 15);
+		var _current = _acak;
+
+		function muatGambar() {
+			$("#muat-gambar").prop('src', "assets/foto/"+fotoArr[_termuat]+".jpg").one('load', function() {
+				fotoU[_termuat] = {
+					w: $(this).width(),
+					h: $(this).height()
+				}
+				_termuat++;
+				_persen = _termuat / 15 * 100;
+				$("#persen-l").html(_persen + '<span>%</span>');
+				$("hr").css('width', _persen + '%');
+				if (_persen == 100) {
+					$tptFoto.attr("href", "assets/foto/"+fotoArr[_acak]+".jpg")
+					.attr('width', fotoU[_acak].w).attr('height', fotoU[_acak].h);
+					$("#mulai").css('transform', 'scale(1)');
+					au.setLyricFromInternet("assets/ABBA-Dream World.lrc", function (a) {
+						animasiE();
+					});
+				} else {
+					muatGambar();
+				}
+			});
+		}
+
+		muatGambar();
+		var _sedangTransisi = false;
+		$("img:eq("+_current+")").show();
+
+		$(document).keyup(function(e) {
+			var papan = e.keyCode || e.which;
+			if (papan - 48 > 9) return true;
+			var mode = papan - 48;
+			lakukanTransisi(mode);
+		});
+
+		var filterCurr = [
+			"brightin",
+			"brightin",
+			"brightout"
+		];
+
+		function lakukanTransisi (m) {
+			switch (m) {
+				case 1:
+					$tptFoto.attr('filter', 'url(#'+filterCurr[m]+')');
+
+					$("#"+filterCurr[m]+" feFuncR animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncR animate").get(1).endElement();
+
+					$("#"+filterCurr[m]+" feFuncG animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncG animate").get(1).endElement();
+
+					$("#"+filterCurr[m]+" feFuncB animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncB animate").get(1).endElement();
+
+					setTimeout(function () {
+						gantiFoto();
+						$("#"+filterCurr[m]+" feFuncR animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncR animate").get(0).endElement();
+
+						$("#"+filterCurr[m]+" feFuncG animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncG animate").get(0).endElement();
+
+						$("#"+filterCurr[m]+" feFuncB animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncB animate").get(0).endElement();
+					}, 1500);
+					break;
+
+				case 2:
+					$tptFoto.attr('filter', 'url(#'+filterCurr[m]+')');
+
+					$("#"+filterCurr[m]+" feFuncR animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncR animate").get(1).endElement();
+
+					$("#"+filterCurr[m]+" feFuncG animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncG animate").get(1).endElement();
+
+					$("#"+filterCurr[m]+" feFuncB animate").get(0).beginElement();
+					$("#"+filterCurr[m]+" feFuncB animate").get(1).endElement();
+
+					setTimeout(function () {
+						gantiFoto();
+						$("#"+filterCurr[m]+" feFuncR animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncR animate").get(0).endElement();
+
+						$("#"+filterCurr[m]+" feFuncG animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncG animate").get(0).endElement();
+
+						$("#"+filterCurr[m]+" feFuncB animate").get(1).beginElement();
+						$("#"+filterCurr[m]+" feFuncB animate").get(0).endElement();
+					}, 1500);
+					break;
+			}
+		}
+
+		function gantiFoto() {
+			while (_acak == _current) {
+				_acak = Math.floor(Math.random() * 15);
+			}
+			_current = _acak;
+			acakXY = [Math.random() > 0.5 ? 1 : -1, Math.random() > 0.5 ? 1 : -1]
+			posXY = [-((fotoU[_current].w - $(window).width()) / 2), -((fotoU[_current].h - $(window).height()) / 2)];
+			$tptFoto.attr("href", "assets/foto/"+fotoArr[_current]+".jpg")
+			.attr('width', fotoU[_current].w).attr('height', fotoU[_current].h)
+			.attr('x', posXY[0]).attr('y', posXY[1]);
+		}
+
+		function animasiE() {
+			window.requestAnimationFrame(animasiE);
+			$tptFoto.attr('y', posXY[1] -= 0.1 * acakXY[1]);
+		}
+	</script>
+</body>
+</html>

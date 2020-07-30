@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>3D Visualiser</title>
+	<script src="js/ast-lirik.js"></script>
+	<script src="assets/jquery-1.11.1.min.js"></script>
+	<link href="assets/fa/css/fa.css" rel="stylesheet">
+	<script src="assets/three.min.js"></script>
+	<script src="assets/postprocessing/EffectComposer.js"></script>
+	<script src="assets/postprocessing/CopyShader.js"></script>
+	<script src="assets/postprocessing/LuminosityHighPassShader.js"></script>
+	<script src="assets/postprocessing/ShaderPass.js"></script>
+	<script src="assets/postprocessing/RenderPass.js"></script>
+	<script src="assets/postprocessing/UnrealBloomPass.js"></script>
+</head>
+<body>
+	<audio id="audio" data-offset="1.1" src="assets/ABBA - Dream World.mp3"></audio>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+	</style>
+	<script type="x-shader/x-vertex" id="vertexshader">
+
+		varying vec2 vUv;
+
+		void main() {
+
+			vUv = uv;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+		}
+
+	</script>
+
+	<script type="x-shader/x-fragment" id="fragmentshader">
+
+		uniform sampler2D baseTexture;
+		uniform sampler2D bloomTexture;
+
+		varying vec2 vUv;
+
+		void main() {
+
+			gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+
+		}
+
+	</script>
+	<script>
+
+	var au = AstLirik("audio").play().setVisualiser();
+
+var settingan = {
+	banyak: 60
+}
+var objek = [];
+
+var sin = new THREE.Scene();
+var kamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+var light = new THREE.PointLight( 0xffffff, 1, 50 );
+light.position.set( 0, 10, 0 );
+sin.add( light );
+
+var alight = new THREE.AmbientLight( 0x051040 ); // soft white light
+sin.add( alight );
+
+// Atur renderan
+
+var perender = new THREE.WebGLRenderer({ antialias: true });
+perender.setSize( window.innerWidth, window.innerHeight );
+perender.toneMapping = THREE.ReinhardToneMapping;
+perender.setPixelRatio( window.devicePixelRatio * 1.5 );
+document.body.appendChild( perender.domElement );
+
+var renderS = new THREE.RenderPass( sin, kamera );
+
+var bloomPass = new THREE.UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+bloomPass.threshold = 0;
+bloomPass.strength = 0.5;
+bloomPass.radius = 0.02;
+bloomPass.renderToScreen = true;
+
+var outputPass = new THREE.ShaderPass( THREE.CopyShader );
+outputPass.renderToScreen = true;
+
+var bloomComposer = new THREE.EffectComposer( perender );
+bloomComposer.setSize(window.innerWidth, window.innerHeight);
+bloomComposer.addPass( renderS );
+bloomComposer.addPass( bloomPass );
+bloomComposer.addPass( outputPass );
+
+// var finalPass = new THREE.ShaderPass(
+// 	new THREE.ShaderMaterial( {
+// 		uniforms: {
+// 			baseTexture: { value: null },
+// 			bloomTexture: { value: bloomComposer.renderTarget2.texture }
+// 		},
+// 		vertexShader: document.getElementById( 'vertexshader' ).textContent,
+// 		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+// 		defines: {}
+// 	} ), "baseTexture"
+// );
+// finalPass.needsSwap = true;
+
+// var finalComposer = new THREE.EffectComposer( perender );
+// finalComposer.addPass( renderS );
+// finalComposer.addPass( finalPass );
+
+var ruanganG = new THREE.BoxBufferGeometry( 200, 200, 50 );
+var material = new THREE.MeshPhongMaterial( { color: 0x204090, side: THREE.BackSide } );
+var ruangan = new THREE.Mesh( ruanganG, material );
+
+sin.add( ruangan );
+
+for (var k = 0; k < settingan.banyak; k++) {
+	var geo = new THREE.CylinderBufferGeometry( 0.25, 0.25, 0.5 );
+	geo.translate( 0.25, 0.25, 0.25 );
+	geo.elementsNeedUpdate = true;
+	material = new THREE.MeshBasicMaterial( { color: "hsl("+(k * 6)+", 100%, 70%)" } );
+	material.shininess = 100;
+	var kotak = new THREE.Mesh( geo, material );
+	objek.push(kotak);
+	sin.add( kotak );
+}
+
+kamera.position.z = 25;
+kamera.position.y = 35;
+kamera.lookAt(0, 10, 0);
+
+var waktu = 0;
+au.update(function (t, l, b, m, v) {
+	var vlen = settingan.banyak;
+	for (var _v = 0; _v < vlen; _v += 2) {
+		var sudut = degkerad(6 * _v + waktu);
+		waktu += 0.02;
+		//objek[_v].geometry.index.needsUpdate = true;
+		//objek[_v].geometry.parameters.height = _v / 10;
+		objek[_v].scale.set(1, v[_v] / 5 + 0.0001, 1);
+		objek[_v].position.set(Math.sin(sudut) * 8, 0, Math.cos(sudut) * 8);
+	}
+//	perender.render(sin, kamera);
+	bloomComposer.render();
+});
+
+function degkerad(derajat) {
+	return derajat * (Math.PI / 180);
+}
+	</script>
+</body>
+</html>

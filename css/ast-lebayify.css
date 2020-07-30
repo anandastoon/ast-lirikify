@@ -1,0 +1,17 @@
+html,body{margin:0;padding:0}
+
+.ast-burst {
+	top: 0;
+	left: 0;
+	border-radius: 50%;
+	position: fixed;
+	z-index: 99;
+	transform-origin: center;
+	-webkit-transform-origin: center;
+	-moz-transform-origin: center;
+	transition: all 0.4s;
+	-webkit-transition: all 0.4s;
+	transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+	-webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+	-moz-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}

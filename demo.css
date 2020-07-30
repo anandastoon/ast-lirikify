@@ -1,0 +1,218 @@
+@font-face {
+    font-family: "bellefair";
+    src: url("../../fon/bellefair.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    src: url("assets/rubrik-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    font-weight: bold;
+    src: url("assets/rubrik_bold-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "tangerine";
+    src: url("assets/tangerine.woff") format('woff');
+}
+
+@font-face {
+    font-family: "soc-page";
+    src: url("assets/soc-page.woff") format('woff');
+}
+
+html, body {
+	padding: 0;
+	padding-top: 30px;
+	margin: 0;
+	background: rgb(161,196,253);
+	background: linear-gradient(45deg, #000428 0%, #004e92 100%);
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	font-family: "soc-page", Arial;
+	box-sizing: border-box;
+}
+
+.kotak-lirik {
+	overflow: visible;
+	width: 400px;
+	position: absolute;
+	height: 100px;
+	top: 200px;
+	left: 200px;
+	z-index: 10;
+}
+
+.bg-lirik {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0px;
+	transition: all 0.3s;
+	height: 100%;
+	background: rgba(0, 116, 217, 0.8);
+}
+
+#tempat-lirik {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+p {
+	color: #92eaff;
+	text-align: center;
+	margin: 8px;
+}
+
+.liriknya {
+	color: #f2f5FF;
+	position: relative;
+	padding: 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+	font-family: "tangerine", Arial;
+	font-size: 2.8em;
+	width: 100%;
+	text-align: center;
+	font-weight: normal;
+}
+
+#liriknext {
+	color: #32baf2;
+	position: absolute;
+	left: 0;
+	right: 0;
+	text-align: center;
+	top: 67px;
+	display: inline-block;
+	white-space: nowrap;
+	font-family: "tangerine", Arial;
+	font-size: 1.2em;
+}
+
+#loding {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: rgb(0,245,255);
+	background: radial-gradient(circle, #0BEEF9 0%, #48A9FE 100%);
+	z-index: 9999;
+	top: 0;
+}
+
+#konten-l {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	height: 300px;
+	overflow: visible;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	color: white;
+}
+
+#konten-l h3 {
+	font-family: 'bellefair';
+	font-weight: normal;
+	font-size: 2em;
+	margin-top: 0;
+}
+
+#konten-l h1 {
+	font-size: 3em;
+	font-weight: normal;
+}
+
+#konten-l hr {
+	border-top: 2px solid white;
+	width: 40%;
+	display: inline-block;
+	position: relative;
+}
+
+#konten-l hr:before {
+	content: "";
+	width: 7px;
+	height: 7px;
+	left: -4px;
+	top: -4px;
+	border-radius: 50%;
+	box-shadow: 0px 0px 6px white;
+	position: absolute;
+	background-color: white;
+}
+
+#konten-l hr:after {
+	content: "";
+	width: 7px;
+	height: 7px;
+	right: -4px;
+	top: -4px;
+	border-radius: 50%;
+	box-shadow: 0px 0px 6px white;
+	position: absolute;
+	background-color: white;
+}
+
+#tempat-foto {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#tempat-foto img {
+	position: absolute;
+	width: 100%;
+	transition: 3s all;
+	transition-timing-function: ease-in;
+}
+
+.blur {
+	filter: blur(20px);
+	-webkit-filter: blur(20px);
+}
+
+.bright {
+	filter: brightness(1000%);
+	-webkit-filter: brightness(1000%);
+}
+
+.contrast {
+	filter: contrast(500%);
+	-webkit-filter: contrast(500%);
+}
+
+.nais {
+	filter: contrast(500%);
+	-webkit-filter: contrast(500%);
+	filter: brightness(10000%);
+	-webkit-filter: brightness(10000%);
+}
+
+#mulai {
+	background-color: #045de9;
+	background-image: linear-gradient(315deg, #045de9 0%, #09c6f9 74%);
+	font-family: "soc-page", Arial;
+	font-size: 2em;
+	color: #f2f5FF;
+	line-height: 150px;
+	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+	display: block;
+	border: 3px #83EAF1 solid;
+	margin: 10px auto 0;
+	transform: scale(0);
+	cursor: pointer;
+	transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+}
