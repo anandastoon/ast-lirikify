@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AST Lirik Documentation</title>
+	<link rel="stylesheet" type="text/css" href="../dok.css">
+</head>
+<body>
+<div id="k-overlay"></div>
+<div id="kontener">
+	<div id="isi">
+		<header>
+			<div id="judul">
+				<h1>AST Lirikify <small>(v0.0.1)</small></h1>
+				<p>Audio library with visualizer and lyric on screen</p>
+			</div>
+		</header>
+		<div id="konten">
+			<div id="sisi-konten">
+				<ul id="api-konten">
+					<li><a href="#gs">Getting Started</a></li>
+					<li><a href="#apis">API (Music)</a></li>
+					<li><a href="#apip">API (Playlist)</a></li>
+					<li><a href="#hto">Tutorials</a></li>
+					<li><a href="#faq">F.A.Q</a></li>
+					<li><a href="#bug">Known Bugs</a></li>
+					<li><a href="#dl">Download</a></li>
+				</ul>
+			</div>
+			<div id="isi-konten">
+				<div id="gs" class="detail-konten">
+					<h2>Getting Started</h2>
+					<p>This is my another JS plugin to visualise music and show lyric on screen via .lrc files.</p>
+					<h3>How to initialize:</h3>
+					<p>In HTML, create your audio tag with your music source, like this:
+						<code>&lt;audio id=&quot;audio&quot; src=&quot;your/path/to/music.mp3&quot;&gt;&lt;/audio&gt;</code>
+					</p>
+					<p>Then in your JS, initialize your variable.
+						<code>var au = AstLirik('audio');</code>
+						Please remember the variable names (in above example: <i>au</i>), since it will be used to control the whole audio.
+					</p>
+				</div>
+				<div id="apis" class="detail-konten">
+					<h2>API (Music)</h2>
+					<p>Remember your initialized variable? Use that to access API below. For the example:
+						<code>
+							var au = AstLirik('audio');<br>
+							<br>
+							au.play() // play the music<br>
+							au.pause() // pause the music<br>
+							au.repeat(2) // repeat the whole playlist<br>
+							au.forward(10) // Jump to 10 milliseconds forward<br>
+							au.setVisualizer() // Start to read the music bytes<br>
+						</code>
+						<br>
+						Now here the method you can access to operate the audio:
+					</p>
+					<div>
+						<h3>play()</h3>
+						<p>Play the music.</p>
+						<h3>pause()</h3>
+						<p>Pause the music.</p>
+						<h3>stop()</h3>
+						<p>Stop the music, reset the time to zero.</p>
+						<h3>mute()</h3>
+						<p>Change volume to zero.</p>
+						<h3>forward(<i>millisecond: number</i>)</h3>
+						<p>Jump forward to the given miliseconds.</p>
+						<h3>backward(<i>millisecond: number</i>)</h3>
+						<p>Jump backward to the given miliseconds.</p>
+						<h3>seek(<i>millisecond: number</i>)</h3>
+						<p>Jump to the given milisecond.</p>
+						<h3>volume(<i>value: float</i>)</h3>
+						<p>Set volume to the given value, range from 0 to 1.</p>
+						<h3>loop(<i>value: boolean</i>)</h3>
+						<p>Set the loop for the playlist, true or false.</p>
+						<h3>speed(<i>value: number</i>)</h3>
+						<p>Set the speed rate for the song, input can vary from 0.1 to 16.</p>
+						<h3>repeat(<i>repeatState: number</i>)</h3>
+						<p>Set the repeat mode for the playlist. <br>
+							Possible arguments:
+							<ul>
+								<li>0 : No repeat</li>
+								<li>1 : Repeat for current song only</li>
+								<li>2 : Repeat the whole playlist</li>
+								<li>repeatState.NONE : No repeat</li>
+								<li>repeatState.ONE : Repeat for current song only</li>
+								<li>repeatState.ALL : Repeat the whole playlist</li>
+							</ul>
+						</p>
+						<h3>setLyric(<i>files: object, delay: number, callback: function</i>)</h3>
+						<p>Pass the .lrc file as the first argument, set the lyric delay for the second argument, and the callback if the lyric has been successfully set for the current song.</p>
+						<h3>setVisualiser()</h3>
+						<p>Analyse the music bytes so the returned array can be used for visualizing music by your own.</p>
+						<h3>update(<i>function(a, b, c, d, e) {}</i>)</h3>
+						<p>The real time access for the song. Useful for changing lyric, and tracking music state, and accessing visualiser data. <br>
+							The arguments returned:
+							<ul>
+								<li>a : The time related. (duration, readable, percentage, current)</li>
+								<li>b : Current lyric, ready to show to the screen.</li>
+								<li>c : Lyric change event. Will be executed every time the lyric is changed.</li>
+								<li>d : The music event. (waiting, play, loop, end, and pause)</li>
+								<li>e : Visualiser data.</li>
+							</ul>
+						</p>
+					</div>
+					<p></p>
+				</div>
+				<div id="apip" class="detail-konten">
+					<h2>API (Playlist)</h2>
+					<p>Remember your initialized variable? Use that to access API below. For the example:
+						<code>
+							var au = AstLirik('audio');<br>
+							<br>
+							au.play() // play the music<br>
+							au.pause() // pause the music<br>
+							au.repeat(2) // repeat the whole playlist<br>
+							au.forward(10) // Jump to 10 milliseconds forward<br>
+							au.setVisualizer() // Start to read the music bytes<br>
+						</code>
+						<br>
+						Now here the method you can access to operate the playlist:
+					</p>
+					<div>
+						<h3>pAdd(<i>files: object, callback: function</i>)</h3>
+						<p>You can just pass the value from the input file to the first argument, and callback if those files is successfully added to the playlist.</p>
+						<h3>pRemove(<i>index: number</i>)</h3>
+						<p>Remove playlist at the given index.</p>
+						<h3>shuffle(<i>value: boolean</i>)</h3>
+						<p>Shuffle musics on the playlist. Not working if the playlist just contains one song.</p>
+						<h3>playNext()</h3>
+						<p>Play the next song on the playlist.</p>
+						<h3>playPrev()</h3>
+						<p>Play the next song on the playlist <b>if the current time is more than 30ms</b> else it would replay the current song.</p>
+					</div>
+					<p></p>
+				</div>
+				<div id="hto" class="detail-konten">
+					<h2>Tutorials</h2>
+					<h3>How do I show the lyric on screen?</h3>
+					<p>
+						<ul>
+							<li>Download your .lrc from the internet, e.g. from megalobiz.com or syair.info</li>
+							<li>Create your input html tag with type attribute set to file.</li>
+							<li>Use .setLyric function to proceed the lyric file.</li>
+							<li>Use .update function to access the lyric.</li>
+						</ul>
+						<code>
+							&lt;audio id=&quot;audio&quot; src=&quot;your/path/to/music.mp3&quot;&gt;&lt;/audio&gt;<br><br>
+							&lt;h1 id=&quot;show-lyric&quot;&gt;&lt;/h1&gt; <br><br>
+							&lt;input type=&quot;file&quot; id=&quot;get-file&quot; /&gt; <br><br>
+							&lt;script&gt;<br>
+							var au = AstLirik('audio');<br><br>
+							var showLyric = document.getElementById(&quot;show-lyric&quot;);<br><br>
+							var fileInput = document.getElementById(&quot;get-file&quot;);<br><br>
+							fileInput.addEventListener(&quot;change&quot;, function () {<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;au.setLyric(this.files[0]);<br>
+							});<br>
+							<br>
+							au.update(function (t, l, b)) {<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;if (b) // Check if lyric has been changed
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showLyric.innerHTML = l; // Show lyric on screen :D<br>
+							});<br>
+							&lt;/script&gt;
+						</code>
+					</p>
+					<h4>Fin</h4>
+					<h3>How do I create realtime visualizer from the music?</h3>
+					<p>
+						<ul>
+							<li>Call .setVisualiser() from the audio variable.</li>
+							<li>Now you can access realtime data from .update() function.</li>
+							<li>The fifth callback argument contain the visualizer data. 128 unsigned integers in the array ready to rock you. :)</li>
+							<li>Loop them, and apply the values to your divs (its width, height, or even background color), svg, or canvas (faster with canvas). You can be creative as you want to.</li>
+							<li>For further optimization, the 128 integers from the array you probably would like to use just about 100 or 80 instead. Mostly the rest are just zeroes.</li>
+						</ul>
+						<code>
+							&lt;audio id=&quot;audio&quot; src=&quot;your/path/to/music.mp3&quot;&gt;&lt;/audio&gt;<br><br>
+							&lt;script&gt;<br>
+							var au = AstLirik('audio');<br><br>
+							au.setVisualiser();<br>
+							<br>
+							au.update(function (t, l, b)) {<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;for (var i = 0; i < v.length; i++) { // Loop the visualizer data
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Apply the value to the divs, svg, or canvas<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							});<br>
+							&lt;/script&gt;
+						</code>
+					</p>
+					<h4>Yep, that's all folks!</h4>
+				</div>
+				<div id="faq" class="detail-konten">
+					<h2>F.A.Q</h2>
+					<h3>What minimum browser version in order this library to work?</h3>
+					<p>It somewhat works on IE9, but strongly I recommend IE11 for minimum browser. Modern browser from 2015 above would be perfectfully executed.</p>
+				</div>
+				<div id="bug" class="detail-konten">
+					<h2>Known Bugs</h2>
+					<p>
+						<ul>
+							<li>In Mozilla Firefox, set speed or playback rate is not working on certain version.</li>
+						</ul>
+					</p>
+				</div>
+				<div id="dl" class="detail-konten">
+					<h2>Download</h2>
+					<p></p>
+				</div>
+			</div>
+		</div>
+		<footer>
+			&copy; Anandastoon 2020
+		</footer>
+	</div>
+</div>
+</body>
+</html>

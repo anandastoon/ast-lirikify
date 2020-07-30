@@ -1,0 +1,212 @@
+@font-face {
+    font-family: "novamono";
+    src: url("assets/novamono.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    src: url("assets/rubrik-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    font-weight: bold;
+    src: url("assets/rubrik_bold-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "soc-page";
+    src: url("assets/soc-page.woff") format('woff');
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+}
+
+html, body {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	font-family: "rubrik", Arial;
+	color: #7fe0fe;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "soc-page";
+}
+
+code {
+	font-family: 'novamono';
+	background: rgba(12,27,66, 0.3);
+	display: block;
+	padding: 10px;
+	margin: 10px 5px;
+	color: #fda50f;
+	position: relative;
+	overflow: hidden;
+}
+
+code:before {
+	font-family: "rubrik";
+	content: "</>";
+	font-size: 9em;
+	position: absolute;
+	right: -30px;
+	bottom: -60px;
+	color: rgba(222, 240, 255, 0.2);
+	z-index: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #39cf70;
+}
+
+header {
+	padding: 30px 10px;
+	text-align: center;
+	background-color: rgba(123, 222, 255, 0.2);
+}
+
+#k-overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: rgb(15,87,44);
+	background: linear-gradient(135deg, rgba(15,87,44,1) 0%, rgba(56,27,123,1) 50%, rgba(44,140,180,1) 100%); 
+}
+
+#kontener {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+#isi {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+#konten {
+	width: 100%;
+}
+
+#sisi-konten {
+	width: 30%;
+	display: inline-block;
+	float: left;
+}
+
+#isi-konten {
+	width: 70%;
+	display: inline-block;
+	float: right;
+}
+
+#isi-konten h2 {
+	background: rgb(15,87,44);
+	background: linear-gradient(90deg, rgba(15,87,44,0) 28%, rgba(20,169,231,0.6) 100%);
+	padding: 10px 12px;
+	font-size: 2em;
+	position: relative;
+	color: #7fe0fe;
+}
+
+#isi-konten h2:after {
+	content: "";
+	width: 100%;
+	position: absolute;
+	height: 1px;
+	top: 0;
+	left: 0;
+	background: rgb(15,87,44);
+	background: linear-gradient(90deg, rgba(0, 0, 0, 0) 25%, rgba(255,255,255,1) 30%, rgba(0, 0, 0, 0) 35%); 
+}
+
+#isi-konten h2:before {
+	content: "";
+	position: absolute;
+	height: 1px;
+	width: 2px;
+	border-radius: 50px;
+	top: 0px;
+	left: 30%;
+	background-color: rgba(0, 0, 0, 0);
+	box-shadow: 0px 0px 4px 2px #ffffff;
+}
+
+#isi-konten h3 {
+	font-family: 'novamono';
+	padding: 10px 12px;
+	background: rgba(0, 0, 25, 0.5);
+	background: linear-gradient(90deg, rgba(0,7,44,0.3) 18%, rgba(0, 0, 0, 0) 70%);
+	border-top-left-radius: 20px 10px;
+	color: #e07ffe;
+}
+
+#isi-konten h4 {
+	padding: 10px 12px;
+	text-align: center;
+	font-size: 1.6em;	
+}
+
+#api-konten {
+	padding-left: 0;
+}
+
+#api-konten li {
+	list-style: none;
+	font-size: 120%;
+	width: 90%;
+	border-bottom: 1px rgba(12, 144, 187, 0.6) solid;
+	transition: 0.2s all;
+	background-color: rgba(44,140,180,0);
+}
+
+#api-konten li:hover { 
+	background-color: rgba(44,140,180,0.2);
+}
+
+#api-konten li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	padding: 10px 5px;
+}
+
+.detail-konten {
+	margin-bottom: 120px;
+	position: relative;
+	color: #6ec0fe;
+}
+
+.detail-konten:before {
+	content: "";
+	bottom: -50px;
+	width: 100%;
+	border-bottom: double rgba(12, 143, 186, 0.6) 4px;
+	position: absolute;
+}
+
+.detail-konten:after {
+	content: "\266A \266B \266A";
+	bottom: -70px;
+	width: 100%;
+	font-size: 2em;
+	color: #3fc0ee;
+	text-align: center;
+	position: absolute;
+}
+
+footer {
+	clear: both;
+	font-size: 1em;
+	text-align: right;
+	padding: 10px 0px;
+	font-family: "soc-page";
+}

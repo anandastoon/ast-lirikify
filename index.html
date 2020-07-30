@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Lirikify</title>
+	<link href="gaya.css?v=1" rel="stylesheet">
+	<script src="js/ast-lirik.js?v=2"></script>
+	<script src="assets/jquery-1.11.1.min.js"></script>
+	<link href="assets/fa/css/fa.css" rel="stylesheet">
+	<script src="../ast-lebayify/js/ast-lebayify.js"></script>
+</head>
+<body>
+		<!-- <audio id="audio" src="assets/ABBA Super Trouper.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="1" src="assets/ABBA - As Good As New.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="-0.3" src="assets/ABBA - The Day Before You Came.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="0" src="assets/ABBA Knowing Me, Knowing You.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="0" src="assets/ABBA One of Us.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="0" src="https://dl.dropbox.com/s/84ovhu21ry4ooih/ABBA%20-%20Nelee.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="0" src="https://dl.dropbox.com/s/vy8hsav5oy27kbl/ABBA%20-%20Chiquitita.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - Angeleyes.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - Hole In Your Soul.mp3"></audio> -->
+		<!-- <audio id="audio" data-offset="2.2" src="assets/Cassandra.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - Nelee.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - I have a dream.MP3"></audio> -->
+		<audio id="audio" data-offset="1.1" src="assets/ABBA - Dream World.mp3"></audio>
+		<!-- <audio id="audio" src="assets/Abba - One Man, One Woman.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/Abba - The Lax.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - Soldiers.mp3"></audio> -->
+		<!-- <audio id="audio" src="assets/ABBA - Our Last Summer.mp3"></audio> -->
+		<input hidden="" type="file" id="lirik" class="tbl-file">
+		<input hidden="" type="file" id="lagu" multiple="" class="tbl-file">
+		<div class="tombol-atas" style="text-align: center;">
+			<button id="ambil-lagu" class="tbl-file"><span>Upload Songs</span></button>
+			<button id="ambil-lirik" class="tbl-file"><span>Upload Lyric</span></button>
+			<button id="dokumentasi" class="tbl-file"><span><a href="doc/">Documentation</a></span></button>
+		</div>
+		<p>Album: <span id="album"></span></p>
+		<p>Artist: <span id="artist"></span></p>
+		<p>Title: <span id="title"></span></p>
+		<div id="totdur">
+			<div id="tot"></div>
+			<div id="dur"></div>
+			<div id="con"></div>
+			<div id="time">00.00</div>
+		</div>
+		<div id="kotak-lirik">
+			<h1 id="liriknya">Anandastoon 2020</h1>
+			<div id="liriknext"></div>
+		</div>
+		<div class="tombol teks-tengah">
+			<button class="tbl-tp tbl-kecil" title="Repeat" id="tbl-repeat"><i class="fa fa-repeat"></i></button>
+			<button class="tbl tbl-kecil" title="Last Song" id="tbl-ffastbackward"><i class="fa fa-step-backward"></i></button>
+			<button class="tbl tbl-gede" title="Play" id="tbl-play"><i class="fa fa-play"></i></button>
+			<button class="tbl tbl-kecil" title="Next Song" id="tbl-ffastforward"><i class="fa fa-step-forward"></i></button>
+			<button class="tbl-tp tbl-kecil" title="Shuffle" id="tbl-shuffle"><i class="fa fa-random"></i></button>
+		</div>
+		<div class="tombol teks-tengah">
+			<button class="tbl tbl-sedeng" title="Slow Down" id="tbl-fastbackward"><i class="fa fa-fast-backward"></i></button>
+			<button class="tbl tbl-sedeng" title="Prev 10 Seconds" id="tbl-backward"><i class="fa fa-backward"></i></button>
+			<button class="tbl tbl-sedeng" title="Stop" id="tbl-stop"><i class="fa fa-stop"></i></button>
+			<button class="tbl tbl-sedeng" title="Next 10 Seconds" id="tbl-forward"><i class="fa fa-forward"></i></button>
+			<button class="tbl tbl-sedeng" title="Speed Up" id="tbl-fastforward"><i class="fa fa-fast-forward"></i></button>
+		</div>
+		<div>
+			<div id="tbl-volume-k">
+				<button title="Slow Down" id="tbl-volume">
+					<i class="fa fa-volume-up"></i>
+				</button>
+				<div id="volume-k">
+					<span id="volume-v"></span>
+					<span id="volume-i"></span>
+					<span id="volume-b"></span>
+				</div>
+			</div>
+		</div>
+		<canvas style="margin: 0 auto; display: block;" id="visualiser" width="300" height="150"></canvas>
+		<div id="konsol"></div>
+		<div id="daftar-putar-k">
+			<div id="daftar-putar-i">
+				<h3 id="daftar-putar-kc"><span id="daftar-putar-kn">Nama Musik</span><span style="float: right;"><i class="fa fa-list"></i></span></h3>
+			</div>
+		</div>
+		<div id="ambil-file-popup">
+			<div class="kloss"><i class="fa fa-times"></i></div>
+			<h3>Ambil dari komputer:</h3>
+			<button id="ambil-file">Ambil File</button>
+			<hr>
+			<h3>Ambil dari internet:</h3>
+			<input type="text" id="internet" placeholder="http://...">
+			<button id="ambil-internet">Konfirmasi</button>
+		</div>
+		<div id="daftar-putar">
+			<div class="kloss"><i class="fa fa-times"></i></div>
+			<div id="daftar-putar-o"></div>
+			<h1>Daftar Putar:</h1>
+			<div id="daftar-putar-d">
+				<div id="dp">
+					<div class="dp-lagu">
+						<span class="dp-st"><i class="fa fa-play"></i></span>
+						<span class="dp-judul">ABBA</span>
+						<span class="dp-durasi">2:30</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="dp-lagu-k">
+			<div hidden="" class="dp-lagu">
+				<span class="dp-st"><i class="fa fa-play"></i></span>
+				<span class="dp-judul">ABBA</span>
+				<span class="dp-durasi">2:30</span>
+				<span class="dp-remove"><i class="fa fa-trash"></i></span>
+			</div>
+		</div>
+	<script>
+	$(document).ready(function() {
+		var tipe = 1;
+		var matineepos = 0;
+		var lirikH1 = document.getElementById("liriknya");
+		var $time = document.getElementById("time");
+		var $dur = document.getElementById("dur");
+		var $tot = document.getElementById("tot");
+		var $con = document.getElementById("con");
+		var pjLirik = lirikH1.getBoundingClientRect().width;
+		var kecepatan = 4;
+		var rate = 1;
+		var kotakLirik = document.getElementById('kotak-lirik');
+		var tblPlay = document.getElementById('tbl-play');
+		var tblBw = document.getElementById('tbl-backward');
+		var tblFw = document.getElementById('tbl-forward');
+		var tblFBw = document.getElementById('tbl-fastbackward');
+		var tblFFw = document.getElementById('tbl-fastforward');
+		var tblStop = document.getElementById('tbl-stop');
+		var liriknext = document.getElementById('liriknext');
+		var ablLirik = document.getElementById('ambil-lirik');
+		var ablLagu = document.getElementById('ambil-lagu');
+		var ablFile = document.getElementById('ambil-file');
+		var $lirik = document.getElementById('lirik');
+		var $lagu = document.getElementById('lagu');
+		var visualiser = document.getElementById('visualiser').getContext('2d');
+		var kontrol = 0;
+		var posMX = 0;
+		var posX = 0;
+
+		$(".kloss").click(function(event) {
+			$(this).parent().toggleClass('aktif');
+		});
+
+		ablLirik.addEventListener("click", function (e) {
+			$lirik.click();
+		});
+
+		ablLagu.addEventListener("click", function (e) {
+			$("#ambil-file-popup").toggleClass('aktif');
+		});
+
+		ablFile.addEventListener("click", function (e) {
+			$lagu.click();
+		});
+
+		$("#ambil-internet").click(function(event) {
+			var that = $(this);
+			that.text("Menunggu...");
+			au.grab($("#internet").val(), function (s) {
+				if (s) {
+					renderPlaylist();
+					that.text("Ditambahkan ke Playlist");
+					setTimeout(function () {
+						that.text("Konfirmasi");
+					}, 1000);
+				}
+				else {
+					that.text("Bukan file audio");
+					setTimeout(function () {
+						that.text("Konfirmasi");
+					}, 1000);
+				};
+			});
+		});
+
+		$("#tbl-ffastforward").click(function(event) {
+			au.playNext();
+			memutarMedia();
+		});
+
+		$("#tbl-ffastbackward").click(function(event) {
+			au.playPrev();
+			memutarMedia();
+		});
+
+		var pertamaKali = true;
+		var isPlaying = false;
+
+		var au = AstLirik("audio").loop().setVisualiser().debug('konsol');
+		if (au.prop.loop) $("#tbl-repeat").addClass('aktif');
+		var lirik = "";
+		$lirik.addEventListener("change", function () {
+			au.setLyric(this.files[0], 0.8, function (li) {
+				lirik = li;
+				isPlaying = true;
+				tblPlay.innerHTML = '<i class="fa fa-pause"></i>';
+				document.getElementById('album').innerHTML = lirik.al;
+				document.getElementById('artist').innerHTML = lirik.ar;
+				document.getElementById('title').innerHTML = lirik.ti;
+			});
+		});
+
+		$(document).on('mousedown', '#con', function(event) {
+			kontrol = 1;
+			posMX = $dur.getBoundingClientRect().left;
+		}).on('mousemove', function(event) {
+			if (kontrol > 0) {
+				posX = Math.max(0, Math.min(( (event.clientX - posMX) / 300 * 100), 100));
+				$con.style.left = 'calc('+posX+'% - 4px)';
+				$dur.style.width = posX+'%';
+				kontrol = 2;
+			}
+		}).on('mouseup', function(event) {
+			if (kontrol == 2)
+				au.seek( (posX * au.playlist[au.current].duration) / 100 );
+			kontrol = 0;
+		});
+
+		var volumeC = {
+			trakir: 100,
+			nilai: 100,
+			k: 0,
+			mX: 0,
+			x: 0
+		}
+		$(document).on('mousedown', '#volume-b', function(event) {
+			volumeC.k = 1;
+			volumeC.mX = $("#volume-k")[0].getBoundingClientRect().left;
+		}).on('mousemove', function(event) {
+			if (volumeC.k > 0) {
+				volumeC.x = Math.max(0, Math.min((event.clientX - volumeC.mX), 150));
+				volumeC.nilai = volumeC.x / 150 * 100;
+				volumeC.k = 2;
+				aturPosVolume();
+			}
+		}).on('mouseup', function(event) {
+			volumeC.k = 0;
+		});
+
+		$("#tbl-volume").click(function(event) {
+			if (volumeC.nilai > 0) {
+				volumeC.trakir = volumeC.nilai;
+				volumeC.nilai = 0;
+			} else
+				volumeC.nilai = volumeC.trakir;
+			aturPosVolume();
+		});
+
+		function aturPosVolume() {
+			$('#volume-b').css("transform", "translateX("+(volumeC.nilai * 150 / 100)+"px)");
+			$("#volume-i")[0].style.width = volumeC.nilai+'%';
+			if (volumeC.nilai < 1)
+				$("#tbl-volume i").prop("class", "fa fa-volume-off");
+			else if (volumeC.nilai < 80)
+				$("#tbl-volume i").prop("class", "fa fa-volume-down");
+			else
+				$("#tbl-volume i").prop("class", "fa fa-volume-up");
+			console.log(volumeC.nilai / 100);
+			au.volume( volumeC.nilai / 100 );
+		}
+
+		$lagu.addEventListener("change", function () {
+			au.pAdd(this.files, function (i, d, p) {
+				renderPlaylist();
+			});
+		});
+
+		function renderPlaylist() {
+			$("#dp").empty();
+			for (var p = 0; p < au.playlist.length; p++) {
+				var dplagu = $("#dp-lagu-k").find(".dp-lagu").clone();
+				dplagu.appendTo('#dp');
+				dplagu.show();
+				dplagu.find(".dp-judul").text(au.playlist[p].name);
+				dplagu.find(".dp-durasi").text(Math.floor(au.playlist[p].duration / 60) + ":" + ("00" + Math.ceil(au.playlist[p].duration % 60)).slice(-2));
+			}
+		}
+
+		var el = Astify("h1");
+
+		tblStop.addEventListener("click", function () {
+			au.stop();
+			isPlaying = false;
+			tblPlay.innerHTML = '<i class="fa fa-play"></i>';
+		});
+		
+		tblFw.addEventListener("click", function () {
+			au.forward();
+		});
+
+		tblBw.addEventListener("click", function () {
+			au.backward();
+		});
+		
+		tblFFw.addEventListener("click", function () {
+			if (rate < 1.75) rate += 0.25;
+			else rate = 1.75;
+			au.speed(rate);
+		});
+
+		tblFBw.addEventListener("click", function () {
+			if (rate > 0.25) rate -= 0.25;
+			else rate = 0.25;
+			au.speed(rate);
+		});
+
+		tblPlay.addEventListener("click", function () {
+			isPlaying = !isPlaying;
+			tblPlay.innerHTML = '<i class="fa fa-'+(isPlaying ? "pause" : "play")+'"></i>';
+			if (!isPlaying)
+				au.pause();
+			else {
+				if (!au.playlist[au.current].lyric.is && pertamaKali) {
+					pertamaKali = false;
+					memutarMedia();
+				}
+				au.play();
+			}
+		});
+
+		$("#tbl-repeat").click(function(event) {
+			au.repeat();
+			switch (au.prop.loop) {
+				case au.repeatState.NONE:
+					$(this).removeClass('aktif');
+					$(this).removeClass('loop');
+					break;
+				case au.repeatState.ONE:
+					$(this).addClass('aktif');
+					$(this).addClass('loop');
+					break;
+				case au.repeatState.ALL:
+					$(this).addClass('aktif');
+					$(this).removeClass('loop');
+					break;
+			}
+		});
+
+		$("#tbl-shuffle").click(function(event) {
+			au.shuffle(!au.isShuffle);
+			$(this).toggleClass('aktif');
+		});
+
+		au.update(function (t, l, b, m, v) {
+			if (m.end) {
+				isPlaying = false;
+				tblPlay.innerHTML = '<i class="fa fa-play"></i>';
+			} else {
+				$time.innerHTML = t.readable;
+				$tot.style.width = t.pbuffered + "%";
+				if (kontrol == 0) {
+					$dur.style.width = t.percentage + "%";
+					$con.style.left = "calc("+t.percentage+"% - 4px)";
+				}
+			}
+
+			if (m.loop) {
+				memutarMedia();
+			}
+
+			switch (tipe) {
+				case 0:
+					if (b) {
+						if (l != "") {
+							lirikH1.innerHTML = l;
+							el.action("zoom out swivel", {dir: "bottom right", duration: 800, split: 2, delayInBetween: 0.03, randomize: true});					
+						} else
+							el.action("zoom out swivel", {duration: 800, type: 1, split: 1, delayInBetween: 0.02, randomize: true});	
+					}
+					break;
+				case 1:
+					if (b) {
+						matineepos = 500;
+						if (!m.pause && au.playlist[au.current].lyric.is) {
+							lirikH1.innerHTML = l == "" ? au.playlist[au.current].lyric.prop.ti : l;
+							liriknext.innerHTML = au.playlist[au.current].lyric.next;
+						}
+						pjLirik = lirikH1.getBoundingClientRect().width;
+					}
+					if (matineepos > 0 - pjLirik) {
+						matineepos -= kecepatan;
+					} else {
+						matineepos = 500;
+					}
+					lirikH1.style.left = matineepos + "px";
+					break;
+			}
+
+			visualiser.clearRect(0, 0, 300, 150);
+			for (var vi = 0; vi < 40; vi += 2) {
+				var pos = [];
+				var posAwal = [75, 75];
+				var tinggiFrekuensi = v[vi] == 0 ? 2 : v[vi] * 0.3;
+				var lebarFrekuensi = 2;
+				pos[0] = posAwal[0] + vi * 4;
+				pos[1] = posAwal[1] - tinggiFrekuensi / 2;
+				visualiser.fillStyle = "rgb(" + (vi % 3 > 0 ? 240 : 255) + "," + (vi % 2 > 0 ? 240 : 255) + "," + 255 + ")";
+        		visualiser.fillRect(pos[0], pos[1], lebarFrekuensi, tinggiFrekuensi);
+			}
+		});
+
+		$("#daftar-putar-k").click(function(event) {
+			if (au.playlist.length > 1)
+				$("#daftar-putar").toggleClass('aktif');
+		});
+
+		$("#dp").on('click', '.dp-st', function(event) {
+			if (au.current == $(this).closest('.dp-lagu').index()) {
+				isPlaying = !isPlaying;
+				if (!isPlaying) {
+					au.pause();
+					$(this).html('<i class="fa fa-play"></i>');					
+				}
+				else {
+					$(this).html('<i class="fa fa-pause"></i>');
+					au.play();
+				}
+			} else {
+				isPlaying = true;
+				au.current = $(this).closest('.dp-lagu').index();
+				au.play(au.playlist[au.current].src, true);
+				tblPlay.innerHTML = '<i class="fa fa-pause"></i>';
+				memutarMedia();
+			}
+		});
+
+		$("#dp").on('click', '.dp-remove', function(event) {
+			var theId = $(this).closest('.dp-lagu').index();
+			if (au.current == theId) {
+				alert("Can not remove current song.");
+			} else {
+				au.pRemove(theId);
+				$(this).closest('.dp-lagu').remove();
+			}
+		});
+
+		function memutarMedia() {
+			$("#daftar-putar-kn").text(au.playlist[au.current].name);
+			lirikH1.innerHTML = "Memutar " + au.playlist[au.current].name;
+			liriknext.innerHTML = "";
+			pjLirik = lirikH1.getBoundingClientRect().width;
+			$("#dp").find(".dp-st").html('<i class="fa fa-play"></i>');
+			$("#dp").find(".dp-lagu:eq("+au.current+")").find(".dp-st").html('<i class="fa fa-pause"></i>');
+			lirik = au.playlist[au.current].lyric.prop;
+			document.getElementById('album').innerHTML = lirik.al || "";
+			document.getElementById('artist').innerHTML = lirik.ar || "";
+			document.getElementById('title').innerHTML = lirik.ti || "";
+		}
+		
+	});
+	</script>
+</body>
+</html>
