@@ -1,6 +1,6 @@
 /*!
- * ast-input.js
- * http://saya.anandastoon.com/library
+ * ast-lirik.js
+ * http://saya.anandastoon.com
  * MIT licensed
  *
  * Copyright (C) 2019 Ananda Maulana Ilhami (Anandastoon), http://anandastoon.com
@@ -105,6 +105,7 @@
 		var _t = {
 			current: 0,
 			readable: "0",
+			timewms: "0",
 			bufferStart: 0,
 			bufferEnd: 0,
 			duration: 0,
@@ -234,7 +235,9 @@
 		}
 		
 		this.elAudio.onseeked = function () {
-			var _currL = $this.playlist[$this.current].lyric;
+			var _currL;
+			if ($this.playlist.length > 0)
+				_currL = $this.playlist[$this.current].lyric;
 			if (_currL.is)
 				for (var t = 0; t < _currL.prop.data.length; t ++) {
 					if ($this.elAudio.currentTime > _currL.prop.data[t].time) {
@@ -246,7 +249,7 @@
 		this.elAudio.onplay = function () {
 			if (_visualizer)
 	    		_dataVisualizer = new Uint8Array(_analyser.frequencyBinCount);
-			_m.waiting = false;
+		    _m.waiting = false;
 			_m.play = true;
 			_m.end = false;
 			_m.pause = false;
@@ -254,7 +257,13 @@
 
 		this.elAudio.onwaiting = function () {
 			_m.waiting = true;
-			//_m.pause = true;
+		};
+
+		this.elAudio.onplaying = function() {
+		    _m.waiting = false;
+			_m.play = true;
+			_m.end = false;
+			_m.pause = false;
 		};
 
 		this.elAudio.onended = function () {
@@ -301,7 +310,7 @@
 			// Assign property from lrc file
 			for (var l = 0; l < _lrc.length; l++) {
 				if (_isNotation) {
-					_l = _lrc[l].trim().replace(/[\[\]]/g, '').split(/:(.+)/);
+					_l = _lrc[l].trim().replace(/[\[\]]/g, '').split(/:/);
 
 					if (_notation.indexOf(_l[0]) == -1) {
 						_currL.prop["data"] = [];
@@ -459,11 +468,17 @@
 			}
 
 			function _updateLyric() {
-				var _currL = $this.playlist[$this.current].lyric;
+				var _currL = {
+					current: "",
+					change: false,
+					prop: {}
+				};
+				if ($this.playlist.length > 0)
+					_currL = $this.playlist[$this.current].lyric;
 				if (!$this.elAudio.paused) {
 					// Check lyric
 					if (typeof _currL.prop.data != "undefined") {
-						if (_currL.index + 1 < _currL.prop.data.length && _currL.prop.data[_currL.index + 1].time < $this.elAudio.currentTime - parseFloat(_currL.offset) / 1000) {
+						while (_currL.index + 1 < _currL.prop.data.length && _currL.prop.data[_currL.index + 1].time < $this.elAudio.currentTime - parseFloat(_currL.offset) / 1000) {
 							_currL.index ++;
 							_currL.current = _currL.prop.data[_currL.index].lyric;
 							_currL.next = typeof _currL.prop.data[_currL.index + 1] != "undefined" ? _currL.prop.data[_currL.index + 1].lyric : "";
@@ -474,6 +489,7 @@
 
 				_t.current = $this.elAudio.currentTime;
 				_t.readable = ("00" + Math.floor(_t.current / 60)).slice(-2) + ":" + ("00" + parseInt(_t.current % 60)).slice(-2);
+				_t.timewms = _t.readable + "." + ("00" + parseInt(_t.current * 100)).slice(-2);
 				_t.percentage = _t.current / $this.elAudio.duration * 100;
 
 				if (_callback && {}.toString.call(_callback) === '[object Function]') _callback(_t, _currL.current, _currL.changed, _m, _dataVisualizer);
@@ -494,7 +510,7 @@
 					this.elAudio.src = src;
 					this.elAudio.load();
 				}
-				this.elAudio.play();
+				if (!_m.play) this.elAudio.play();
 				if (_m.end) {
 					_m.end = false;
 					$this.elAudio.currentTime = 0;
@@ -510,6 +526,10 @@
 			return this;
 		}
 
+		Lirikify.prototype.isPlaying = function () {
+			return _m.play;
+		}
+
 		Lirikify.prototype.stop = function () {
 			this.elAudio.currentTime = 0;
 			this.elAudio.pause();
@@ -522,14 +542,17 @@
 
 		Lirikify.prototype.pause = function () {
 			this.elAudio.pause();
+			_m.play = false;
 			_m.pause = true;
 			updateProp.call(this, "time");
 			return this;
 		}
 
 		Lirikify.prototype.seek = function (time) {
-			this.elAudio.currentTime = time;
-			updateProp.call(this, "time");
+			if (this.playlist.length > 0) {
+				this.elAudio.currentTime = time;
+				updateProp.call(this, "time");
+			}
 			return this;
 		}
 
@@ -620,5 +643,5 @@
 		return this;
 	}
 
-	return AstLirik;
+	return (window.AstLirik = window.astl = AstLirik);
 }));

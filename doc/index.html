@@ -55,27 +55,36 @@
 						Now here the method you can access to operate the audio:
 					</p>
 					<div>
-						<h3>play()</h3>
-						<p>Play the music.</p>
-						<h3>pause()</h3>
+						<h3>elAudio<i> : object DOM</i></h3>
+						<p>The audio element itself.</p>
+						<h3>play(<i>src: string</i>, <i>refresh: boolean</i>)<i> : function</i></h3>
+						<p>Play the music. <br>
+							The arguments:
+							<ul>
+								<li>src (optional) : The url of the song</li>
+								<li>refresh (optional) : true if you when to reshuffle song when <a href="#api-shuffle">shuffle playlist enabled</a>.</li>
+							</ul></p>
+						<h3>isPlaying()<i> : function</i></h3>
+						<p>Returns true if the current song is playing.</p>
+						<h3>pause()<i> : function</i></h3>
 						<p>Pause the music.</p>
-						<h3>stop()</h3>
+						<h3>stop()<i> : function</i></h3>
 						<p>Stop the music, reset the time to zero.</p>
-						<h3>mute()</h3>
+						<h3>mute()<i> : function</i></h3>
 						<p>Change volume to zero.</p>
-						<h3>forward(<i>millisecond: number</i>)</h3>
+						<h3>forward(<i>millisecond: number</i>)<i> : function</i></h3>
 						<p>Jump forward to the given miliseconds.</p>
-						<h3>backward(<i>millisecond: number</i>)</h3>
+						<h3>backward(<i>millisecond: number</i>)<i> : function</i></h3>
 						<p>Jump backward to the given miliseconds.</p>
-						<h3>seek(<i>millisecond: number</i>)</h3>
+						<h3>seek(<i>millisecond: number</i>)<i> : function</i></h3>
 						<p>Jump to the given milisecond.</p>
-						<h3>volume(<i>value: float</i>)</h3>
+						<h3>volume(<i>value: float</i>)<i> : function</i></h3>
 						<p>Set volume to the given value, range from 0 to 1.</p>
-						<h3>loop(<i>value: boolean</i>)</h3>
+						<h3>loop(<i>value: boolean</i>)<i> : function</i></h3>
 						<p>Set the loop for the playlist, true or false.</p>
-						<h3>speed(<i>value: number</i>)</h3>
+						<h3>speed(<i>value: number</i>)<i> : function</i></h3>
 						<p>Set the speed rate for the song, input can vary from 0.1 to 16.</p>
-						<h3>repeat(<i>repeatState: number</i>)</h3>
+						<h3>repeat(<i>repeatState: number</i>)<i> : function</i></h3>
 						<p>Set the repeat mode for the playlist. <br>
 							Possible arguments:
 							<ul>
@@ -87,11 +96,11 @@
 								<li>repeatState.ALL : Repeat the whole playlist</li>
 							</ul>
 						</p>
-						<h3>setLyric(<i>files: object, delay: number, callback: function</i>)</h3>
+						<h3>setLyric(<i>files: object, delay: number, callback: function</i>)<i> : function</i></h3>
 						<p>Pass the .lrc file as the first argument, set the lyric delay for the second argument, and the callback if the lyric has been successfully set for the current song.</p>
-						<h3>setVisualiser()</h3>
+						<h3>setVisualiser()<i> : function</i></h3>
 						<p>Analyse the music bytes so the returned array can be used for visualizing music by your own.</p>
-						<h3>update(<i>function(a, b, c, d, e) {}</i>)</h3>
+						<h3>update(<i>function(a, b, c, d, e) {}</i>)<i> : function</i></h3>
 						<p>The real time access for the song. Useful for changing lyric, and tracking music state, and accessing visualiser data. <br>
 							The arguments returned:
 							<ul>
@@ -102,6 +111,10 @@
 								<li>e : Visualiser data.</li>
 							</ul>
 						</p>
+						<h3>setVisualiser()<i> : function</i></h3>
+						<p>Analyse the music bytes so the returned array can be used for visualizing music by your own.</p>
+						<h3>grab(<i>url: string, callback: function(isAMusicURL: boolean)</i>)<i> : function</i></h3>
+						<p>Get mp3 from the internet via url, pass the url to the first argument. And the callback would be thrown either it's success or not by accessing first callback argument.</p>
 					</div>
 					<p></p>
 				</div>
@@ -121,16 +134,20 @@
 						Now here the method you can access to operate the playlist:
 					</p>
 					<div>
-						<h3>pAdd(<i>files: object, callback: function</i>)</h3>
+						<h3>pAdd(<i>files: object, callback: function</i>)<i> : function</i></h3>
 						<p>You can just pass the value from the input file to the first argument, and callback if those files is successfully added to the playlist.</p>
-						<h3>pRemove(<i>index: number</i>)</h3>
+						<h3>pRemove(<i>index: number</i>)<i> : function</i></h3>
 						<p>Remove playlist at the given index.</p>
-						<h3>shuffle(<i>value: boolean</i>)</h3>
+						<h3 id="api-shuffle">shuffle(<i>value: boolean</i>)<i> : function</i></h3>
 						<p>Shuffle musics on the playlist. Not working if the playlist just contains one song.</p>
-						<h3>playNext()</h3>
+						<h3>playNext()<i> : function</i></h3>
 						<p>Play the next song on the playlist.</p>
-						<h3>playPrev()</h3>
+						<h3>playPrev()<i> : function</i></h3>
 						<p>Play the next song on the playlist <b>if the current time is more than 30ms</b> else it would replay the current song.</p>
+						<h3>playlist<i> : Array</i></h3>
+						<p>An array that contains object of individual songs and its properties.</p>
+						<h3>current<i> : Integer</i></h3>
+						<p>The current played song index.</p>
 					</div>
 					<p></p>
 				</div>
@@ -179,7 +196,7 @@
 							var au = AstLirik('audio');<br><br>
 							au.setVisualiser();<br>
 							<br>
-							au.update(function (t, l, b)) {<br>
+							au.update(function (t, l, b, m, v)) {<br>
 							&nbsp;&nbsp;&nbsp;&nbsp;for (var i = 0; i < v.length; i++) { // Loop the visualizer data
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Apply the value to the divs, svg, or canvas<br>
 							&nbsp;&nbsp;&nbsp;&nbsp;}<br>
@@ -201,10 +218,13 @@
 							<li>In Mozilla Firefox, set speed or playback rate is not working on certain version.</li>
 						</ul>
 					</p>
+					<p><em>Please report if you find bugs or want to request a feature. I'll gladly listen.</em></p>
 				</div>
 				<div id="dl" class="detail-konten">
 					<h2>Download</h2>
-					<p></p>
+					<p>
+
+					</p>
 				</div>
 			</div>
 		</div>

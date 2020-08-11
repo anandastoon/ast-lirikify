@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>LRC Maker by Anandastoon</title>
+	<link href="lrc.css?v=7" rel="stylesheet">
+	<script src="js/ast-lirik.js?v=1"></script>
+	<script src="assets/jquery-1.11.1.min.js"></script>
+	<link href="assets/fa/css/fa.css" rel="stylesheet">
+	<script src="../ast-lebayify/js/ast-lebayify.js?v=3"></script>
+</head>
+<body>
+	<div id="kontener">
+		<div id="konten">
+			<div id="kepala">
+				<h1>LRC Maker</h1>
+				<h3>By Anandastoon v0.1</h3>
+			</div>
+			<div id="badan">
+				<audio id="audio" hidden=""></audio>
+				<div id="t-tombol">
+					<button id="upload" class="tbl"><i class="fa fa-music"></i> Upload Song</button>
+					<button id="pastel" class="tbl"><i class="fa fa-clipboard"></i> Paste Lyric</button>
+					<button id="pastel" class="tbl"><i class="fa fa-question"></i> Help</button>
+					<input type="file" id="berkas" hidden="" accept="audio/*">
+					<input type="file" id="lrc" hidden="" accept=".lrc">
+				</div>
+				<h3 id="namus" class="tengah">Nama Musik</h3>
+				<div id="totdur">
+					<div id="tot"></div>
+					<div id="dur"></div>
+					<div id="con"></div>
+					<div id="time">00.00</div>
+				</div>
+				<div class="utama">
+				<table id="tabel-keterangan">
+						<tr>
+							<td data-alias="ar" style="width: 15%">Artist:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+							<td data-alias="al" style="width: 15%">Album:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+						</tr>
+						<tr>
+							<td data-alias="ti" style="width: 15%">Title:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+							<td data-alias="au" style="width: 15%">Song Writer:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+						</tr>
+						<tr>
+							<td data-alias="id" style="width: 15%">ID:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+							<td data-alias="offset" style="width: 15%">Offset:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+						</tr>
+						<tr>
+							<td data-alias="by" style="width: 15%">LRC Author:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+							<td data-alias="ve" style="width: 15%">Version:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input">
+							</td>
+						</tr>
+						<tr hidden>
+							<td data-alias="re" style="width: 15%">Software:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input" value="Anandastoon's LRC Maker">
+							</td>
+							<td data-alias="length" style="width: 15%">Length:</td>
+							<td style="width: 35%">
+								<input type="text" class="lrc-input" id="length">
+							</td>
+						</tr>
+					</table>
+					<table id="tabel-waktu">
+						<thead>
+							<tr>
+								<th style="width: 25%">
+									Time
+								</th>
+								<th style="width: 75%" colspan="2">
+									Desc
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div id="morol" hidden>
+			<div class="kloss"><i class="fa fa-times"></i></div>
+			<div id="paste">
+				<div>
+					<textarea id="lirik-area"></textarea>
+					<button id="ltbl" class="tbl sangga">To lyric table.</button>
+				</div>
+			</div>
+			<div id="helep">
+				
+			</div>
+		</div>
+		<div id="stiki" class="tengah">
+			<button id="main" class="tbl"><i class="fa fa-play"></i></button>
+			<button id="tandai" class="tbl"><i class="fa fa-map-pin"></i>&nbsp;Mark</button>
+			<button id="simpan" class="tbl"><i class="fa fa-file-text-o"></i>&nbsp;Save .lrc</button>
+			<button id="unggah" class="tbl"><i class="fa fa-upload"></i>&nbsp;Load .lrc</button>
+			<a href="index.html" target="_blank"><button id="test" class="tbl"><i class="fa fa-check-square-o"></i>&nbsp;Test .lrc</button></a>
+		</div>
+	</div>
+	<script>
+		var pointer = 0;
+		var tabelMusik = $("#tabel-waktu tbody");
+		var namaMusik = "";
+		var $time = document.getElementById('time');
+		var $dur = document.getElementById("dur");
+		var $tot = document.getElementById("tot");
+		var $con = document.getElementById("con");
+		var $namus = document.getElementById("namus");
+		var main = $("#main");
+		$(document).ready(function() {
+			var au = astl('audio');
+
+			$("#upload").click(function(event) {
+				$("#berkas").click();
+			});
+
+			$("#pastel").click(function(event) {
+				$("#morol").show();
+			});
+
+			$("#unggah").click(function(event) {
+				$("#lrc").click();
+			});
+
+			$("#berkas").change(function(event) {
+				au.pAdd(this.files, function () {
+					if (au.playlist.length > 1) au.playlist.shift();
+					au.playNext();
+					var dur = au.playlist[au.current].duration;
+					$("#length").val(("00" + Math.floor(dur / 60)).slice(-2) + ":" + ("00" + parseInt(dur % 60)).slice(-2));
+					main.html('<i class="fa fa-pause"></i>');
+					namus.innerHTML = au.playlist[au.current].name;
+				});
+			});
+
+			$("#lrc").change(function(event) {
+				var _fr = new FileReader();
+				_fr.onload = function(e) {
+					bacaLirik(e.target.result);
+				};
+				_fr.readAsText(this.files[0]);
+			});
+
+			$("#ltbl").click(function(event) {
+				var val = $("#lirik-area").val();
+				if (val.replace(/\s/g,'') == "")
+					alert("The lyric area is still empty");
+				else {
+					var lirTabel = val.split("\n");
+					var lTl = lirTabel.length;
+					for (var lT = 0; lT < lTl; lT ++) {
+						tabelMusik.append(["<tr>",
+							"<td></td>",
+							"<td><input type='text' class='lrc-input' value='"+lirTabel[lT].replace(/[\']/g, "&apos;")+"'></td>",
+							"<td><i class='hps fa fa-trash'></i></td>",
+							"</tr>"].join(""));
+					}
+
+					pointer = 0;
+					var tEl = tabelMusik.find("tr:eq("+pointer+")").css('background-color', 'rgba(200, 222, 255, 0.2)');
+					$("#lirik-area").val('');
+					$(".kloss").click();
+				}
+			});
+
+			$(".kloss").click(function(event) {
+				$("#morol").hide();
+			});
+
+			main.click(function(event) {
+				if (au.isPlaying()) {
+					au.pause();
+					main.html('<i class="fa fa-play"></i>');
+				} else {
+					au.play();
+					main.html('<i class="fa fa-pause"></i>');
+				}
+			});
+
+			var kontrol = 0;
+			var posMX = 0;
+			var posX = 0;
+			$(document).on('mousedown', '#con', function(event) {
+				kontrol = 1;
+				posMX = $dur.getBoundingClientRect().left;
+			}).on('mousemove', function(event) {
+				if (kontrol > 0) {
+					posX = Math.max(0, Math.min(( (event.clientX - posMX) / 300 * 100), 100));
+					$con.style.left = 'calc('+posX+'% - 4px)';
+					$dur.style.width = posX+'%';
+					kontrol = 2;
+				}
+			}).on('mouseup', function(event) {
+				if (kontrol == 2 && au.playlist.length > 0)
+					au.seek( (posX * au.playlist[au.current].duration) / 100 );
+				kontrol = 0;
+			});
+
+			var diklik = false;
+			var shiftK = false;
+			$("#tandai").click(function (e) {
+				shiftK = e.shiftKey;
+				diklik = true;
+			});
+			$("#simpan").click(function (e) {
+				if (tabelMusik.find("tr").length > 0) {
+					proses();
+				} else
+					alert("Please add atleast one timestamp");
+			});
+
+			tabelMusik.on('click', 'tr', function(event) {
+				if (!$(event.target).hasClass('hps') && !$(event.target).hasClass('lrc-input')) {
+					tabelMusik.find("tr").css('background-color', 'transparent');
+					if (pointer == $(this).index()) {
+						pointer = tabelMusik.find("tr").length;
+						return false;
+					}
+					pointer = $(this).index();
+					$(this).css('background-color', 'rgba(200, 222, 255, 0.2)');
+				}
+			});
+
+			au.update(function (a, b, c, d, e) {
+				$time.innerHTML = a.readable;
+				$tot.style.width = a.pbuffered + "%";
+				if (kontrol == 0) {
+					$dur.style.width = a.percentage + "%";
+					$con.style.left = "calc("+a.percentage+"% - 4px)";
+				}
+
+				if (d.end)
+					main.html('<i class="fa fa-play"></i>');
+
+				if (diklik) {
+					diklik = false;
+					if (au.playlist.length > 0) {
+						if (shiftK && tabelMusik.find("tr").length > 0) {
+							$(["<tr>",
+								"<td>"+a.timewms+"</td>",
+								"<td><input type='text' class='lrc-input'></td>",
+								"<td><i class='hps fa fa-trash'></i></td>",
+								"</tr>"].join("")).insertAfter(tabelMusik.find("tr:eq("+pointer+")"));
+							shiftK = false;
+						}
+						else if (pointer >= tabelMusik.find("tr").length) {
+							pointer = tabelMusik.find("tr").length;
+							tabelMusik.append(["<tr>",
+								"<td>"+a.timewms+"</td>",
+								"<td><input type='text' class='lrc-input'></td>",
+								"<td><i class='hps fa fa-trash'></i></td>",
+								"</tr>"].join(""));
+							//$("#kontener").animate({scrollTop:tabelMusik.find("tr:eq("+pointer+")").position().top}, 100);
+							pointer++;
+						}
+						else {
+							var tEl = tabelMusik.find("tr:eq("+pointer+") td:eq(0)");
+							if (tEl.html() == "")
+								tEl.html(a.timewms);
+							else
+								tEl.html(tEl.html() + "<br>" + a.timewms);
+							tEl = tEl.closest("tr").css('background-color', 'transparent');
+							tEl.next().css('background-color', 'rgba(200, 222, 255, 0.2)');
+							//$("#kontener").animate({scrollTop:tabelMusik.find("tr:eq("+pointer+")").position().top}, 100);
+							//console.log(tabelMusik.find("tr:eq("+pointer+")").position().top);
+							pointer++;
+						}
+					} else
+						alert("Please add the song");
+				}
+			});
+
+			$(document).on('click', '.hps', function(event) {
+				var tEl = $(this).closest("tr").find("td:eq(0)");
+				if (tEl.find('br').length > 0) {
+					var msK = tEl.html().split("<br>");
+					msK.pop();
+					tEl.html(msK.join("<br>"));
+				} else {
+					pointer = tabelMusik.find("tr").length;
+					$(this).closest("tr").remove();
+				}
+			});
+
+			tabelMusik.on('click', 'td:first-child', function(event) {
+				if ($(this).text() != "") $(this).prop('contenteditable', true);
+			});
+		});
+
+		function bacaLirik(lrc) {
+			$("#tabel-keterangan .lrc-input").val('');
+			$("#tabel-waktu tbody").empty();
+			var notasi = ['ar', 'al', 'ti', 'au', 'id', 'by', 'length', 're', 've', 'offset'];
+			var notasikah = true;
+			var tdnya = 0;
+			var _lrc = lrc.split("\n");
+			var lnya;
+
+			for (var l = 0; l < _lrc.length; l++) {
+				if (notasikah) {
+					lnya = _lrc[l].trim().replace(/[\[\]]/g, '').split(/:/);
+
+					if (notasi.indexOf(lnya[0]) == -1) {
+						notasikah = false;
+					} else {
+						lnya[0] = lnya[0].trim();
+						if (lnya[0] != "")
+							$.each($("#tabel-keterangan td"), function(index, val) { 
+								if (index % 2 == 0 && $(this).data('alias') == lnya[0]) {
+									$(this).next().find("input").val(lnya[1]);
+									return true;
+								}
+							});
+					}
+				}
+
+				if (!notasikah) {
+					if (_lrc[l].indexOf("[") > -1) {
+						lnya = _lrc[l].split("]");
+						var lirikE = lnya.pop();
+						tabelMusik.append(["<tr>",
+							"<td>"+lnya.join("<br>").replace(/[\[\]]/g, "")+"</td>",
+							"<td><input type='text' class='lrc-input' value='"+lirikE.replace(/[\']/g, "&apos;")+"'></td>",
+							"<td><i class='hps fa fa-trash'></i></td>",
+							"</tr>"].join(""));
+					}
+				}
+			}
+
+			pointer = tabelMusik.find("tr").length;
+		}
+
+		function proses() {
+			var stringE = "";
+			var stringA = "";
+			$.each($("#tabel-keterangan td"), function(index, val) {
+				if (index % 2 == 0) {
+					stringE += "[";
+					stringE += $(this).data('alias') + ":";
+				} else {
+					if ($(this).find('input').val() != "")
+						stringE += $(this).find('input').val() + "]\n";
+					else
+						stringE = "";
+					stringA += stringE;
+					stringE = "";
+				}
+			});
+
+			stringA += "\n";
+
+			$.each($("#tabel-waktu tbody tr"), function(index, val) {
+				if ($(this).find("td:eq(0)").html() == "") $(this).find("td:eq(0)").html("00:00.00");
+				stringE += "["+$(this).find("td:eq(0)").html().replace(/<br\s*[\/]?>/gi, "][")+"]"+$(this).find("td:eq(1) input").val()+"\n";
+			});
+			stringA += stringE;
+
+			download(stringA, $namus.innerHTML.slice(0, -4) + ".lrc", "text/plain");
+		}
+
+		function download(data, filename, type) {
+		    var file = new Blob([data], {type: type});
+		    if (window.navigator.msSaveOrOpenBlob) // IE10+
+		        window.navigator.msSaveOrOpenBlob(file, filename);
+		    else { // Others
+		        var a = document.createElement("a"),
+		                url = URL.createObjectURL(file);
+		        a.href = url;
+		        a.download = filename;
+		        document.body.appendChild(a);
+		        a.click();
+		        setTimeout(function() {
+		            document.body.removeChild(a);
+		            window.URL.revokeObjectURL(url);  
+		        }, 0); 
+		    }
+		}
+	</script>
+</body>
+</html>

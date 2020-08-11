@@ -1,0 +1,231 @@
+@font-face {
+    font-family: "bellefair";
+    src: url("../../fon/bellefair.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    src: url("assets/rubrik-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "rubrik";
+    font-weight: bold;
+    src: url("assets/rubrik_bold-webfont.woff") format('woff');
+}
+
+@font-face {
+    font-family: "tangerine";
+    src: url("assets/tangerine.woff") format('woff');
+}
+
+@font-face {
+    font-family: "soc-page";
+    src: url("assets/soc-page.woff") format('woff');
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	padding: 0;
+	margin: 0;
+	background: rgb(161,196,253);
+	background: linear-gradient(45deg, #000428 0%, #004e92 100%);
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	font-family: "bellefair", Arial;
+	color: #45d2fd;
+}
+
+#kontener {
+	padding-top: 20px;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+	position:relative;
+}
+
+#konten {
+	max-width: 960px;
+	padding-bottom: 100px;
+	margin: 0 auto;
+}
+
+#kepala h1, #kepala h3 {
+	text-align: center;
+	font-weight: normal;
+}
+
+#t-tombol {
+	text-align: center;
+}
+
+.sangga {
+	margin-top: 20px;
+}
+
+.tengah {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.tbl {
+	display: inline-block;
+	padding: 10px 12px;
+	border: none;
+	cursor: pointer;
+	background-color: rgb(122, 223, 255);
+	color: #123470;
+	font-family: "rubrik";
+	font-size: 105%;
+}
+
+#totdur {
+	position: relative;
+	width: 300px;
+	margin: 20px auto 10px;
+	height: 10px;
+}
+
+#dur, #tot {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 3px;
+}
+
+#tot {
+	background-color: rgba(100, 150, 200, 0.5);
+	width: 0%;
+}
+
+#dur {
+	background-color: #92eaff;
+	width: 0%;
+}
+
+#con {
+	height: 12px;
+	width: 12px;
+	box-shadow: 0px 0px 10px 3px #32baf2;
+	background-color: #f2f5FF;
+	position: absolute;
+	top: -4px;
+	left: -4px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#time {
+	position: absolute;
+	top: -10px;
+	right: -40px;
+	font-family: "iceland", Arial;
+	color: #f2f5FF;
+}
+
+#namus {
+	font-family: "iceland", Arial;
+	font-weight: normal;
+}
+
+table {
+	width: 100%;
+	margin-top: 20px;
+	border-top: 1px solid #32baf2;
+	font-family: "rubrik";
+	border-collapse: collapse;
+}
+
+table th {
+	font-size: 120%;
+	text-align: center;
+	font-weight: normal;
+	padding: 10px 12px;
+}
+
+table td {
+	padding: 6px 8px;
+}
+
+.lrc-input {
+	width: 100%;
+	background: transparent;
+	border: none;
+	color: inherit;
+	font-family: inherit;
+	border-bottom: #32baf2 2px solid;
+	padding: 10px 12px;
+	font-size: inherit;
+}
+
+.hps {
+	padding: 10px;
+	margin: 0 10px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#stiki {
+	position: fixed;
+	z-index: 100;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 10px 12px;
+	background-color: #32baf2;
+}
+
+#morol {
+	background-color: rgba(200, 222, 255, 0.5);
+	border: 3px solid #32baf2;
+	width: 100%;
+	max-width: 500px;
+	max-height: 500px;
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	overflow: hidden;
+	transform-origin: center center;
+	transform: scale(1, 1);
+	transition: 0.3s all;
+	border-radius: 6px;
+	padding: 40px 30px;
+	text-align: center;
+}
+
+.kloss {
+	position: absolute;
+	right: 6px;
+	top: 6px;
+	width: 24px;
+	height: 24px;
+	font-size: 1em;
+	line-height: 24px;
+	border-radius: 50%;
+	background: #32baf2;
+	border: 1px #027af2 solid;
+	text-align: center;
+	vertical-align: middle;
+	color: #FFF;
+	cursor: pointer;
+	z-index: 10;
+}
+
+#morol textarea {
+	width: 100%;
+	height: 300px;
+	background-color: #021234;
+	border: none;
+	color: #02baf2;
+	font-family: "rubrik";
+	padding: 10px;
+	resize: none;
+}

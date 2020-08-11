@@ -2,12 +2,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Lirikify</title>
-	<link href="gaya.css?v=1" rel="stylesheet">
+	<title>AST Lirik | Music Player</title>
+	<link href="gaya.css?v=2" rel="stylesheet">
 	<script src="js/ast-lirik.js?v=2"></script>
 	<script src="assets/jquery-1.11.1.min.js"></script>
 	<link href="assets/fa/css/fa.css" rel="stylesheet">
-	<script src="../ast-lebayify/js/ast-lebayify.js"></script>
 </head>
 <body>
 		<!-- <audio id="audio" src="assets/ABBA Super Trouper.mp3"></audio> -->
@@ -29,10 +28,12 @@
 		<!-- <audio id="audio" src="assets/ABBA - Our Last Summer.mp3"></audio> -->
 		<input hidden="" type="file" id="lirik" class="tbl-file">
 		<input hidden="" type="file" id="lagu" multiple="" class="tbl-file">
+		<h1 id="judul">AST Lirik (Lirikify)</h1>
+		<p id="desk">Music player with lyric on screen</p>
 		<div class="tombol-atas" style="text-align: center;">
 			<button id="ambil-lagu" class="tbl-file"><span>Upload Songs</span></button>
 			<button id="ambil-lirik" class="tbl-file"><span>Upload Lyric</span></button>
-			<button id="dokumentasi" class="tbl-file"><span><a href="doc/">Documentation</a></span></button>
+			<button id="dokumentasi" class="tbl-file"><span><a href="doc/" target="_blank">Documentation</a></span></button>
 		</div>
 		<p>Album: <span id="album"></span></p>
 		<p>Artist: <span id="artist"></span></p>
@@ -45,7 +46,7 @@
 		</div>
 		<div id="kotak-lirik">
 			<h1 id="liriknya">Anandastoon 2020</h1>
-			<div id="liriknext"></div>
+			<div id="liriknext"><a href="lrc-maker" target="_blank">Click here to create your own .lrc file</a></div>
 		</div>
 		<div class="tombol teks-tengah">
 			<button class="tbl-tp tbl-kecil" title="Repeat" id="tbl-repeat"><i class="fa fa-repeat"></i></button>
@@ -73,7 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<canvas style="margin: 0 auto; display: block;" id="visualiser" width="300" height="150"></canvas>
+		<canvas style="margin: 0 auto; display: block;" id="visualiser" width="300" height="100"></canvas>
 		<div id="konsol"></div>
 		<div id="daftar-putar-k">
 			<div id="daftar-putar-i">
@@ -82,17 +83,17 @@
 		</div>
 		<div id="ambil-file-popup">
 			<div class="kloss"><i class="fa fa-times"></i></div>
-			<h3>Ambil dari komputer:</h3>
+			<h3>Upload from computer:</h3>
 			<button id="ambil-file">Ambil File</button>
 			<hr>
-			<h3>Ambil dari internet:</h3>
+			<h3>Get from the internet:</h3>
 			<input type="text" id="internet" placeholder="http://...">
-			<button id="ambil-internet">Konfirmasi</button>
+			<button id="ambil-internet">Confirm</button>
 		</div>
 		<div id="daftar-putar">
 			<div class="kloss"><i class="fa fa-times"></i></div>
 			<div id="daftar-putar-o"></div>
-			<h1>Daftar Putar:</h1>
+			<h1>Playlist:</h1>
 			<div id="daftar-putar-d">
 				<div id="dp">
 					<div class="dp-lagu">
@@ -194,7 +195,7 @@
 		if (au.prop.loop) $("#tbl-repeat").addClass('aktif');
 		var lirik = "";
 		$lirik.addEventListener("change", function () {
-			au.setLyric(this.files[0], 0.8, function (li) {
+			au.setLyric(this.files[0], 0, function (li) {
 				lirik = li;
 				isPlaying = true;
 				tblPlay.innerHTML = '<i class="fa fa-pause"></i>';
@@ -280,8 +281,6 @@
 			}
 		}
 
-		var el = Astify("h1");
-
 		tblStop.addEventListener("click", function () {
 			au.stop();
 			isPlaying = false;
@@ -364,14 +363,6 @@
 
 			switch (tipe) {
 				case 0:
-					if (b) {
-						if (l != "") {
-							lirikH1.innerHTML = l;
-							el.action("zoom out swivel", {dir: "bottom right", duration: 800, split: 2, delayInBetween: 0.03, randomize: true});					
-						} else
-							el.action("zoom out swivel", {duration: 800, type: 1, split: 1, delayInBetween: 0.02, randomize: true});	
-					}
-					break;
 				case 1:
 					if (b) {
 						matineepos = 500;
@@ -393,8 +384,8 @@
 			visualiser.clearRect(0, 0, 300, 150);
 			for (var vi = 0; vi < 40; vi += 2) {
 				var pos = [];
-				var posAwal = [75, 75];
-				var tinggiFrekuensi = v[vi] == 0 ? 2 : v[vi] * 0.3;
+				var posAwal = [75, 50];
+				var tinggiFrekuensi = v[vi] == 0 ? 2 : v[vi] * 0.2;
 				var lebarFrekuensi = 2;
 				pos[0] = posAwal[0] + vi * 4;
 				pos[1] = posAwal[1] - tinggiFrekuensi / 2;
