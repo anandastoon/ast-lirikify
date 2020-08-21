@@ -5,6 +5,8 @@ Written in pure JS.<br />
 
 ## Feature
 * Lirikify has tools for music player so you can build your own music player with provided API in the documentation.
+* LRC reader that help you show lyric on screen.
+* Ability to visualize the music by retrieving the sample frequency that already converted to an array.
 * You can even create your own playlist.
 
 ## Installation
