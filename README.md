@@ -14,9 +14,9 @@ Written in pure JS.<br />
 ```<script src="<ast-lirikify-folder>/js/ast-lirik.js"></script>```
 
 ## Demo and Documentation
-Demo : https://saya.anandastoon.com/ast-lib/ast-lirik/
-Documentation : https://saya.anandastoon.com/ast-lib/ast-lirik/doc/
-Online LRC Maker : https://saya.anandastoon.com/ast-lib/ast-lirik/lrc-maker
+* Demo : https://saya.anandastoon.com/ast-lib/ast-lirik/
+* Documentation : https://saya.anandastoon.com/ast-lib/ast-lirik/doc/
+* Online LRC Maker : https://saya.anandastoon.com/ast-lib/ast-lirik/lrc-maker
 
 ## Contact
 You can send an email to anandastoon@gmail.com if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone.<br />
